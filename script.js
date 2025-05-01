@@ -1,42 +1,22 @@
-<script>
-  // Animacja fade-in przy przewijaniu
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('fade-in');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, {
-    threshold: 0.1
+const lightbox = document.createElement('div');
+lightbox.id = 'lightbox';
+document.body.appendChild(lightbox);
+
+document.querySelectorAll('.gallery img').forEach(img => {
+  img.addEventListener('click', () => {
+    lightbox.innerHTML = '';
+    const enlargedImg = document.createElement('img');
+    enlargedImg.src = img.src;
+    lightbox.appendChild(enlargedImg);
+    lightbox.style.display = 'flex';
+    setTimeout(() => lightbox.classList.add('show'), 10);
   });
+});
 
-  document.querySelectorAll('.gallery img').forEach(img => {
-    img.classList.add('hidden');
-    observer.observe(img);
-  });
-
-  // Lightbox - powiększanie zdjęcia
-  const createLightbox = () => {
-    const lightbox = document.createElement('div');
-    lightbox.id = 'lightbox';
-    document.body.appendChild(lightbox);
-
-    lightbox.addEventListener('click', () => {
-      lightbox.classList.remove('active');
-      lightbox.innerHTML = '';
-    });
-
-    document.querySelectorAll('.gallery img').forEach(image => {
-      image.addEventListener('click', e => {
-        lightbox.classList.add('active');
-        const img = document.createElement('img');
-        img.src = image.src;
-        lightbox.innerHTML = '';
-        lightbox.appendChild(img);
-      });
-    });
-  };
-
-  createLightbox();
-</script>
+lightbox.addEventListener('click', () => {
+  lightbox.classList.remove('show');
+  setTimeout(() => {
+    lightbox.style.display = 'none';
+    lightbox.innerHTML = '';
+  }, 300);
+});
